@@ -10,6 +10,7 @@ import cv2
 
 from src.metrics import skeleton_metrics
 from src.skeleton import zhang_suen, thin_opencv
+from src.preprocessing import fill_small_holes      # ← 新增这行导入
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 INPUT_DIR = PROJECT_ROOT / "data" / "input"
@@ -33,7 +34,8 @@ def main():
 
     rows = []
     for path in paths:
-        binary = cv2.imread(str(path), cv2.IMREAD_GRAYSCALE)
+        # binary = cv2.imread(str(path), cv2.IMREAD_GRAYSCALE)
+        binary = fill_small_holes(cv2.imread(str(path), cv2.IMREAD_GRAYSCALE))
         if binary is None:
             raise ValueError(f"读取失败:{path}")
 

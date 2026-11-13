@@ -216,4 +216,38 @@ def remove_small_components(binary_image: np.ndarray, min_area: int = 100) -> np
 
     return np.isin(labels,keep_labels).astype(np.uint8) * 255
 
+def fill_small_holes(binary_image: np.ndarray, max_area: int = 16) -> np.ndarray:
+    """
+    填充面积不超过 max_area 的孔洞（不接触图像边界的背景连通域）。
+
+    用途：去除二值化噪声造成的"针孔"，避免骨架在孔洞周围生成伪环。
+    注意：只填小孔。像圆环那种大孔洞（面积上万）不会被填充。
+
+    :param binary_image: 二维二值图，取值 {0, 255}
+    :param max_area: 孔洞面积上限（像素数）
+    :return: 填充后的二值图，取值 {0, 255}
+    """
+    validate_binary_image(binary_image)
+    if max_area < 0:
+        raise ValueError(f"错误:max_area 不能为负数，当前为 {max_area}")
+
+    h, w = binary_image.shape
+    bg = (binary_image == 0).astype(np.uint8)
+    num, labels, stats, _ = cv2.connectedComponentsWithStats(bg, connectivity=4)
+
+    out = binary_image.copy()
+    for i in range(1, num):
+        x, y, ww, hh, area = stats[i]
+        # 接触图像边界的背景是"外部"，不是孔洞
+        if x == 0 or y == 0 or x + ww == w or y + hh == h:
+            continue
+        if area <= max_area:
+            out[labels == i] = 255
+    return out
+
+
+
+
+
+
 
