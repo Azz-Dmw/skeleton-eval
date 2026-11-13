@@ -19,3 +19,8 @@ outputs/
 # ---------- 系统文件 ----------
 Thumbs.db
 .DS_Store
+
+# ---------- 测试缓存 ----------
+.pytest_cache/
+.coverage
+htmlcov/

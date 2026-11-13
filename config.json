@@ -1,0 +1,16 @@
+{
+  "preprocessing": {
+    "threshold": 127,
+    "invert": true,
+    "max_hole_area": 16
+  },
+  "thinning": {
+    "max_iter": 200
+  },
+  "distance_skeleton": {
+    "sigma": 1.5,
+    "tolerance": 0.3,
+    "min_distance": 1.0,
+    "max_gap": 40.0
+  }
+}
