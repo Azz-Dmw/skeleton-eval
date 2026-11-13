@@ -146,7 +146,7 @@ def compute_distance_transform(
 
     return dist
 
-def _validate_binary_image(binary_image:np.ndarray) -> None:
+def validate_binary_image(binary_image:np.ndarray) -> None:
     """私有辅助函数：校验二值图输入，供本模块多个函数复用。"""
     if binary_image is None:
         raise ValueError("错误:binary_image 不能为 None")
@@ -183,7 +183,7 @@ def select_largest_component(binary_image: np.ndarray) -> np.ndarray:
     使用 8 连通（对角线接触也算相连），避免细线被切断。
     输出仍为 {0, 255} 的 uint8 二值图。
     """
-    _validate_binary_image(binary_image)
+    validate_binary_image(binary_image)
 
     num_labels,labels,stats,_= cv2.connectedComponentsWithStats(binary_image,connectivity=8)
 
@@ -202,7 +202,7 @@ def remove_small_components(binary_image: np.ndarray, min_area: int = 100) -> np
     与 select_largest_component 的区别：这里保留所有"够大"的连通域，
     适合一张图里有多个研究对象的场景。
     """
-    _validate_binary_image(binary_image)
+    validate_binary_image(binary_image)
     if min_area < 0:
         raise ValueError(f"错误:min_area 不能为负数，当前为 {min_area}")
 
